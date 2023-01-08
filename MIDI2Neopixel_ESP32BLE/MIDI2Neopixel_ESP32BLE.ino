@@ -671,13 +671,53 @@ void setup() {
 
   ArduinoOTA.begin();
 
+  esp32FOTA.setManifestURL( manifest_url );
+  esp32FOTA.setProgressCb( [](size_t progress, size_t size) {
+    Serial.printf("Progress: %u%%\r", (progress / (size / 100)));
+    tft.fillScreen(TFT_BLACK);
+    tft.setCursor(0, 0, 2);
+    tft.setTextColor(TFT_BLUE, TFT_WHITE);
+    tft.println("MIDI2Neopixel");
+    tft.setTextColor(TFT_YELLOW);
+    tft.print("Updating progress: ");
+    tft.println((progress / (size / 100)));
+    fill_solid( leds, NUM_LEDS, CRGB(0, 0, 0));
+    CRGB color = 0x0000FF;
+    leds[(progress / (size / 100))] = color;
+    for (int a = 1; a < (progress / (size / 100)); a++) {
+      leds[a] = color;
+    }
+    color = 0xFF0000;
+    leds[(100)] = color;
+    FastLED.show();
+    Progress = progress;
+  });
+  esp32FOTA.setUpdateFinishedCb( [](int partition, bool restart_after) {
+    Serial.printf("Update could not begin with %s partition\n", partition==U_SPIFFS ? "spiffs" : "firmware" );
+    // do some stuff e.g. notify a MQTT server the update completed successfully
+    Serial.println("\nEnd");
+    tft.fillScreen(TFT_BLACK);
+    tft.setCursor(0, 0, 2);
+    tft.setTextColor(TFT_BLUE, TFT_WHITE);
+    tft.println("MIDI2Neopixel");
+    tft.setTextColor(TFT_YELLOW);
+    tft.println("End updating");
+    CRGB color = 0xFF0000;
+    for (int a = 1; a < 100; a++) {
+      leds[a] = color;
+    }
+    FastLED.show();
+    if( restart_after ) {
+      ESP.restart();
+    }
+  });
+
   serverstart();
   server.begin();
 
   Serial.println("Wifi ready");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
-  esp32FOTA.setManifestURL( manifest_url );
 #endif
   //BLEMidiClient.begin("MIDI2Neopixel");
   BLEMidiServer.begin("MIDI2Neopixel");
