@@ -1,5 +1,12 @@
-{
-    "type": "MIDI2Neopixel_ESP32BLE",
-    "version": "1.0.0",
-    "url": "/MIDI2Neopixel_ESP32BLE.ino.esp32.bin"
-}
+[
+    {
+        "type": "MIDI2Neopixel_ESP32BLE",
+        "version": "1.0.0",
+        "url": "/MIDI2Neopixel_ESP32BLE.ino.esp32.bin"
+    },
+    {
+        "type": "MIDI2Neopixel_ESP32BLE",
+        "version": "1.0.1",
+        "url": "/MIDI2Neopixel_ESP32BLE1.0.1.ino.esp32.bin"
+    }
+]
