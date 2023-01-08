@@ -17,4 +17,6 @@ D33 | DI
 GND | GND
 ## software
 Turn on Arduino idf, run MIDI2Neopixel_ESP32BLE/MIDI2Neopixel_ESP32BLE.ino and upload!
-That's it!
+
+important!
+![how to do](/img/how-to-do.png)
